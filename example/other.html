@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="broadcast-message" onclick="test()">test</button>
+    <script type="module">
+        import WindowRPC from '../index.mjs'
+        const windowRpc = new WindowRPC('other')
+
+        window.test = () => {
+            windowRpc.callFunc('index', 'test', [1, 2, 3]).then(res => {
+                console.log(res)
+            })
+        }
+    </script>
+</body>
+
+</html>
