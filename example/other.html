@@ -9,12 +9,24 @@
 
 <body>
     <button id="broadcast-message" onclick="test()">test</button>
+    <button id="broadcast-message" onclick="testPromise()">test promise</button>
+    <button id="broadcast-message" onclick="testObject()">test object</button>
     <script type="module">
         import WindowRPC from '../index.mjs'
-        const windowRpc = new WindowRPC('other')
+        const windowRpc = new WindowRPC('other', true)
 
         window.test = () => {
             windowRpc.callFunc('index', 'test', [1, 2, 3]).then(res => {
+                console.log(res)
+            })
+        }
+        window.testPromise = () => {
+            windowRpc.callFunc('index', 'testPromise', [1, 2, 3]).then(res => {
+                console.log(res)
+            })
+        }
+        window.testObject = () => {
+            windowRpc.callFunc('index', 'testObject', [1, 2, 3]).then(res => {
                 console.log(res)
             })
         }

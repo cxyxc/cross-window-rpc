@@ -10,9 +10,11 @@
 <body>
     <script type="module">
         import WindowRPC from '../index.mjs'
-        const windowRpc = new WindowRPC('index')
+        const windowRpc = new WindowRPC('index', true)
 
-        windowRpc.addFunc('test', (a, b, c) => 'index....' + a + b + c)
+        windowRpc.addFunc('test', (a, b, c) => a + b + c)
+        windowRpc.addFunc('testPromise', (a, b, c) => Promise.resolve(`promise test, ${a + b + c}`))
+        windowRpc.addFunc('testObject', (a, b, c) => ({ a, b, c }))
     </script>
 </body>
 

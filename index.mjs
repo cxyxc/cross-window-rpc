@@ -4,25 +4,35 @@ export default class WindowRPC {
   funcRef = {}
   eventResolveRef = {}
   eventRejectRef = {}
+  debug = false
 
-  constructor(name) {
+  constructor(name, debug = false) {
     this.windowName = name
     this.channel = new BroadcastChannel('__WindowRPC__')
     this.init()
+    this.debug = debug
+  }
+
+  log(s) {
+    if (this.debug) console.log(s)
   }
 
   init() {
     this.channel.addEventListener("message", (event) => {
+      this.log(event.data)
       const { windowName, funcName, messageId, args, type, result: callResult } = JSON.parse(event.data);
       if (type === 'call' && windowName === this.windowName) {
         // 调函数，回消息
         try {
-          const result = this.funcRef[funcName](...args)
-          this.channel.postMessage(JSON.stringify({
-            messageId,
-            result,
-            type: 'resolve'
-          }));
+           Promise.resolve(this.funcRef[funcName](...args)).then(result => {
+             this.channel.postMessage(JSON.stringify({
+               messageId,
+               result,
+               type: 'resolve'
+             }));
+           }).catch((e) => {
+            throw Error(e)
+           })
         } catch (e) {
           this.channel.postMessage(JSON.stringify({
             messageId,
